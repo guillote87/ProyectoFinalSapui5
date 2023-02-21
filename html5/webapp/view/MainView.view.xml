@@ -2,13 +2,13 @@
     <Page id="page" title="{i18n>mainMenu}">
         <Panel id="empleadosPanel" headerText="{i18n>employees}"  expanded="true" expandable="true">
             <content>
-                <GenericTile id="createEmployeeTile" class="sapUiSmallMarginEnd">
+                <GenericTile id="createEmployeeTile" class="sapUiSmallMarginEnd" press=".toCreateEmployee">
                     <TileContent footer="{i18n>createEmployee}">
                         <ImageContent src="sap-icon://add-employee" />
                     </TileContent>
                 </GenericTile>
-                <GenericTile id="searchEmployeeTile" class="sapUiSmallMarginEnd" >
-                    <TileContent footer="{i18n>searchEmployee}">
+                <GenericTile id="searchEmployeesTile" class="sapUiSmallMarginEnd" press=".toSearchEmployees" >
+                    <TileContent footer="{i18n>searchEmployees}">
                         <TileContent>
                             <ImageContent src="sap-icon://employee-lookup" />
                         </TileContent>

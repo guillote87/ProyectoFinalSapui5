@@ -1,0 +1,60 @@
+<mvc:View xmlns:upload="sap.m.upload" controllerName="gq4dev.html5.controller.EmployeeWizard" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m">
+    <NavContainer id="navContainer">
+        <pages>
+            <Page id="" title="{i18n>createEmployee}">
+                <content>
+                    <Wizard id="createEmployeeWizard" renderMode="Page" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" complete="onPressReview" finishButtonText="{i18n>review}">
+                        <WizardStep id="employeeTypeStep" title="{i18n>employeeType}" validated="false">
+                            <MessageStrip text="{i18n>selectionEmployeeType}" showIcon="true" class="sapUiMediumMarginBottom" />
+                            <FlexBox height="200px" alignItems="Start" justifyContent="Center">
+                                <Button text="{i18n>btnIntern}" press="onbtnEmployeePress" class="sapUiSmallMarginEnd">
+                                    <customData>
+                                        <core:CustomData key="btnTypeEmployee" value="intern" />
+                                    </customData>
+                                </Button>
+                                <Button text="{i18n>btnAutonomous}" press="onbtnEmployeePress" class="sapUiSmallMarginEnd">
+                                    <customData>
+                                        <core:CustomData key="btnTypeEmployee" value="autonomous" />
+                                    </customData>
+                                </Button>
+                                <Button text="{i18n>btnManager}" press="onbtnEmployeePress" class="sapUiSmallMarginEnd">
+                                    <customData>
+                                        <core:CustomData key="btnTypeEmployee" value="manager" />
+                                    </customData>
+                                </Button>
+                            </FlexBox>
+                        </WizardStep>
+                        <WizardStep id="employeeInfoStep" title="{i18n>employeeInfo}" validated="true">
+                            <MessageStrip text="{i18n>infoEmployeeForm}" showIcon="true" class="sapUiMediumMarginBottom" />
+                            <core:Fragment fragmentName="gq4dev.html5.fragments.employeeFragment" type="XML" />
+                        </WizardStep>
+                        <WizardStep title="{i18n>employeeAdditionalInfo}" validated="true">
+                            <MessageStrip text="{i18n>additionalInfo}" showIcon="true" class="sapUiMediumMarginBottom" />
+
+                            <Label text="{i18n>comments}" />
+                            <TextArea width="100%" growing="true" growingMaxLines="6" />
+                            <upload:UploadSet />
+                        </WizardStep>
+                    </Wizard>
+                </content>
+                <footer>
+                    <OverflowToolbar>
+                        <ToolbarSpacer />
+                        <Button text="{i18n>btnCancelEmployee}" />
+                    </OverflowToolbar>
+                </footer>
+            </Page>
+            <Page  id="review" title="{i18n>resume}">
+                <core:Fragment fragmentName="gq4dev.html5.fragments.reviewEmployee" type="XML" />
+                  <footer>
+						<Bar>
+							<contentRight>
+								<Button text="Submit" press="handleWizardSubmit"/>
+								<Button text="Cancel" press="handleWizardCancel"/>
+							</contentRight>
+						</Bar>
+					</footer>
+            </Page>
+        </pages>
+    </NavContainer>
+</mvc:View>

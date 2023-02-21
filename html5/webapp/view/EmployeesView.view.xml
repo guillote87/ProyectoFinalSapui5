@@ -1,0 +1,51 @@
+<mvc:View xmlns:tnt="sap.tnt" xmlns:upload="sap.m.upload" controllerName="gq4dev.html5.controller.EmployeeView" xmlns:f="sap.f" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" displayBlock="true" xmlns="sap.m">
+    <SplitContainer id="SplitContDemo" initialDetail="detail" initialMaster="master">
+        <masterPages>
+            <Page id="master" backgroundDesign="List" showNavButton="true">
+                <subHeader>
+                    <Toolbar>
+                        <SearchField width="100%" />
+                    </Toolbar>
+                </subHeader>
+                      <List
+                        id="EmployeeList"
+                        items="{ path : 'employeeModel>/Users', 
+                                filters :[{
+                                            path: 'SapId',
+                                            operator: 'EQ',
+                                            value1: 'gq4dev@gmail.com'  
+                                            }                                 
+                                        ]
+                            }"
+                        selectionChange="showEmployee"
+                        mode="SingleSelectMaster"                   
+                        growing="true"
+                        growingThreshold="50"
+                        includeItemInSelection="true">
+                    
+                        <infoToolbar>                    
+                            <OverflowToolbar visible="false" id="idInfoToolbar">
+                                <Label id="idFilterLabel" />
+                            </OverflowToolbar>
+                        </infoToolbar>
+                        <items>
+                        <StandardListItem
+                            title="{employeeModel>FirstName} , {employeeModel>LastName}"
+                            description="{employeeModel>Dni}"
+                            icon=""
+                            iconDensityAware="false"
+                            iconInset="false"
+                            type="Active"
+                            />
+                        </items>
+                            
+                    </List>
+            </Page>
+        </masterPages>
+        <detailPages>
+            <Page id="detail" title="{i18n>employeeDetail}" backgroundDesign="Solid">
+                <Panel />
+            </Page>
+        </detailPages>
+    </SplitContainer>
+</mvc:View>

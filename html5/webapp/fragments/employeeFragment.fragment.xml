@@ -1,0 +1,26 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+    
+    
+    <f:SimpleForm id="employeeForm" editable="true">
+        <Label text="{i18n>name}" />
+        <Input id="inputName" required="true" />
+
+        <Label text="{i18n>lastName}" />
+        <Input id="inputLastName" required="true" />
+
+        <Label text="{i18n>DNI}" />
+        <Input id="inputDNI" required="true" />
+
+        <Label text="{i18n>CFI}" />
+        <Input id="inputCFI" required="true" />
+
+        <Label text="{i18n>salary}" />
+        <Slider id="sliderSalary" enableTickmarks="true" class="sapUiMediumMarginBottom" width="100%" />
+
+        <Label text="{i18n>price}" />
+        <Slider id="sliderPrice" enableTickmarks="true" class="sapUiMediumMarginBottom" width="100%" />
+
+        <Label text="{i18n>date}" />
+        <DatePicker id="datePicker" required="true" />
+    </f:SimpleForm>
+</core:FragmentDefinition>

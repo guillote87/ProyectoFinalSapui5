@@ -24,7 +24,7 @@
                                 </Button>
                             </FlexBox>
                         </WizardStep>
-                        <WizardStep id="employeeInfoStep" title="{i18n>employeeInfo}" validated="true">
+                        <WizardStep id="employeeInfoStep" title="{i18n>employeeInfo}" validated="false">
                             <MessageStrip text="{i18n>infoEmployeeForm}" showIcon="true" class="sapUiMediumMarginBottom" />
                             <core:Fragment fragmentName="gq4dev.html5.fragments.employeeFragment" type="XML" />
                         </WizardStep>
@@ -38,22 +38,26 @@
                     </Wizard>
                 </content>
                 <footer>
-                    <OverflowToolbar>
-                        <ToolbarSpacer />
-                        <Button text="{i18n>btnCancelEmployee}" />
-                    </OverflowToolbar>
+                <Bar id="otbFooter">
+                    <contentLeft>
+                        <Button icon="sap-icon://alert" text="{= ${message>/}.length }" visible="{= ${message>/}.length > 0 }" type="Emphasized" press="onMessagePopoverPress" />
+                    </contentLeft>
+                      <contentRight>
+                            <Button text="Cancel" press="handleWizardCancel" />
+                        </contentRight>
+                </Bar>
                 </footer>
             </Page>
-            <Page  id="review" title="{i18n>resume}">
+            <Page id="review" title="{i18n>resume}">
                 <core:Fragment fragmentName="gq4dev.html5.fragments.reviewEmployee" type="XML" />
-                  <footer>
-						<Bar>
-							<contentRight>
-								<Button text="Submit" press="handleWizardSubmit"/>
-								<Button text="Cancel" press="handleWizardCancel"/>
-							</contentRight>
-						</Bar>
-					</footer>
+                <footer>
+                    <Bar>
+                        <contentRight>
+                            <Button text="Submit" press="handleWizardSubmit" />
+                            <Button text="Cancel" press="handleWizardCancel" />
+                        </contentRight>
+                    </Bar>
+                </footer>
             </Page>
         </pages>
     </NavContainer>

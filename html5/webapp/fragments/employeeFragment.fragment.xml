@@ -1,18 +1,36 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
-    
-    
     <f:SimpleForm id="employeeForm" editable="true">
         <Label text="{i18n>name}" />
-        <Input id="inputName" required="true" />
+        <Input id="inputName" required="true" value="{
+										path: 'employeeModel>/Name',
+										type: 'sap.ui.model.type.String',
+										constraints: {
+											minLength: 3,
+											search: '^[a-zA-Z]+[\\s]?[a-zA-Z]+$'
+										}
+									}" liveChange="validateInfoStep" valueState="{employeeModel>/NameState}" />
 
         <Label text="{i18n>lastName}" />
-        <Input id="inputLastName" required="true" />
+        <Input id="inputLastName" required="true" value="{
+										path: 'employeeModel>/LastName',
+										type: 'sap.ui.model.type.String',
+										constraints: {
+											minLength: 3,
+											search: '^[a-zA-Z]+[\\s]?[a-zA-Z]+$'
+										}
+									}" liveChange="validateInfoStep" />
 
         <Label text="{i18n>DNI}" />
-        <Input id="inputDNI" required="true" />
+        <Input id="inputDNI" required="true" value="{
+										path: 'employeeModel>/DNI',
+										type: 'sap.ui.model.type.String',
+										constraints: {
+											search: '^[0-9-]+$',
+											minLength: 8}
+									}" liveChange="validateInfoStep" />
 
         <Label text="{i18n>CFI}" />
-        <Input id="inputCFI" required="true" />
+        <Input id="inputCFI" required="true" liveChange="validateInfoStep" />
 
         <Label text="{i18n>salary}" />
         <Slider id="sliderSalary" enableTickmarks="true" class="sapUiMediumMarginBottom" width="100%" />
@@ -21,6 +39,13 @@
         <Slider id="sliderPrice" enableTickmarks="true" class="sapUiMediumMarginBottom" width="100%" />
 
         <Label text="{i18n>date}" />
-        <DatePicker id="datePicker" required="true" />
+        <DatePicker id="infoDatePicker" required="true" value="{
+											path: 'employeeModel>/date',
+										type: 'sap.ui.model.type.String',
+										constraints: {
+											minLength: 7,
+											maxLength: 7
+										}}" valueFormat="MM/YYYY" displayFormat="MM/YYYY" change="validateInfoStep" />
     </f:SimpleForm>
+    
 </core:FragmentDefinition>

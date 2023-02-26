@@ -22,7 +22,6 @@
                         growing="true"
                         growingThreshold="50"
                         includeItemInSelection="true">
-                    
                         <infoToolbar>                    
                             <OverflowToolbar visible="false" id="idInfoToolbar">
                                 <Label id="idFilterLabel" />

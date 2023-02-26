@@ -1,9 +1,11 @@
 sap.ui.define(
   [
     "sap/ui/core/mvc/Controller",
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "sap/ui/core/message/Message",
+    "sap/ui/core/Fragment"
   ],
-  function (BaseController, MessageToast) {
+  function (BaseController, MessageToast, Message,Fragment) {
     "use strict";
 
     return BaseController.extend("gq4dev.html5.controller.EmployeeWizard", {
@@ -11,8 +13,22 @@ sap.ui.define(
         this._navigation = this.byId("navContainer")
         this._wizard = this.getView().byId('createEmployeeWizard')
         this._EmployeeType = "intern"
+
+
+        var oView = this.getView()
+        // Iniciamos un modelo de mensajes (donde guardaremos los datos)
+        var oMessageManager = sap.ui.getCore().getMessageManager();
+        oView.setModel(oMessageManager.getMessageModel(), "message");
+
+        // Registramos el disparador a la vista actual
+        oMessageManager.registerObject(oView, true);
+
       },
       onbtnEmployeePress: function (oEvent) {
+        let employeeModel = new sap.ui.model.json.JSONModel({ Name: "Guillermo" })
+        this.getView().setModel(employeeModel, "employeeModel")
+        this.getView().getModel("employeeModel")
+
         var btnEmployeeType = oEvent.getSource();
         let sliderSalary = this.byId("sliderSalary")
         let sliderPrice = this.byId("sliderPrice")
@@ -48,7 +64,58 @@ sap.ui.define(
       },
       onPressReview: function () {
         this._navigation.to(this.byId("review"));
-      }
-    });
-  }
-);
+      },
+      validateInfoStep: function () {
+        this._checkStep("employeeInfoStep", ["inputName", "inputLastName", "inputDNI", "infoDatePicker"]);
+      },
+      // Verifica en que paso estamos del wizard y pasa un array de inputs para validar
+      _checkStep: function (sStepName, aInputIds) {
+        let oStep = this.byId(sStepName)
+        let bEmptyInputs = this._checkInputFields(aInputIds)
+
+
+        if (!bEmptyInputs) {
+          this._wizard.validateStep(oStep)
+        } else {
+          this._wizard.invalidateStep(oStep)
+        }
+      },
+
+      //Revisa los inputs del array y en relacion a los constraints definidos en la vista, evalua 
+
+      _checkInputFields: function (aInputIds) {
+        var oView = this.getView();
+
+        return aInputIds.some(function (sInputId) {
+          var oInput = oView.byId(sInputId);
+          var oBinding = oInput.getBinding("value");
+          try {
+            oBinding.getType().validateValue(oInput.getValue());
+          } catch (oException) {
+            return true;
+          }
+          return false;
+        });
+      },
+      _getMessagePopover: function () {
+        var oView = this.getView();
+
+        if (!this._pMessagePopover) {
+          this._pMessagePopover = Fragment.load({
+            id: oView.getId(),
+            name: "gq4dev.html5.fragments.MessageError"
+          }).then(function (oMessagePopover) {
+            oView.addDependent(oMessagePopover);
+            return oMessagePopover;
+          });
+        }
+        return this._pMessagePopover;
+      },
+      onMessagePopoverPress: function (oEvent) {
+        var oSourceControl = oEvent.getSource();
+        this._getMessagePopover().then(function (oMessagePopover) {
+          oMessagePopover.openBy(oSourceControl);
+        });
+      },
+    })
+  })

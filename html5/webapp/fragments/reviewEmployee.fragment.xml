@@ -3,25 +3,25 @@
         <Panel headerText="1. {i18n>employeeType}">
             <f:SimpleForm editable="false" layout="ResponsiveGridLayout">
                 <Label text="{i18n>type}" />
-                <Text text="Gerente" />
-                <Button text="{i18n>edit}" press="onEdit1" type="Transparent" width="20%" />
+                <Text text="{employeeModel>/Type}" />
+                <Button text="{i18n>edit}" press="goToStep1" type="Transparent" width="20%" />
             </f:SimpleForm>
         </Panel>
         <Panel headerText="2. {i18n>employeeInfo}" >
             <f:SimpleForm
                 editable="false"
                 layout="ResponsiveGridLayout" >
-                <Label text="{i18n>name}" />
-                <Text text="Guillermo" />
+                <Label text="{i18n>Name}" />
+                <Text text="{employeeModel>/FirstName}" />
                 <Label text="{i18n>lastName}" />
-                <Text text="Quattrocchi" />
+                <Text text="{employeeModel>/LastName}" />
                 <Label text="{i18n>DNI}" />
-                <Text text="30236821" />
+                <Text text="{employeeModel>/Dni}" />
                 <Label text="{i18n>salary}" />
-                <Text text="20000" />
+                <Text text="{employeeModel>/Salary}" />
                 <Label text="{i18n>date}" />
-                <Text text="18/02/2023" />
-                <Button text="{i18n>edit}" press="onEdit2" type="Transparent" width="20%" />
+                <Text text="{employeeModel>/Date}" />
+                <Button text="{i18n>edit}" press="goToStep2" type="Transparent" width="20%" />
             </f:SimpleForm>
         </Panel>
         <Panel headerText="3. {i18n>additionalInfo}">
@@ -30,7 +30,7 @@
                 <Text text="Desarrollador SAPUI5" />
                 <Label text="{i18n>documents}" />
                 <Text text="1 Archivo" />
-                <Button text="{i18n>edit}" press="onEdit3" type="Transparent" width="20%" />
+                <Button text="{i18n>edit}" press="goToStep3" type="Transparent" width="20%" />
             </f:SimpleForm>
         </Panel>   
 </core:FragmentDefinition>

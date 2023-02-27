@@ -7,6 +7,7 @@ sap.ui.define(
 
         return BaseController.extend("gq4dev.html5.controller.ReviewEmployee", {
             onInit() {
+                this._wizard = this.getView().byid("createEmployeeWizard")
             }
         });
     }

@@ -24,11 +24,11 @@
                                 </Button>
                             </FlexBox>
                         </WizardStep>
-                        <WizardStep id="employeeInfoStep" title="{i18n>employeeInfo}" validated="false">
+                        <WizardStep id="employeeInfoStep" title="{i18n>employeeInfo}" validated="false" >
                             <MessageStrip text="{i18n>infoEmployeeForm}" showIcon="true" class="sapUiMediumMarginBottom" />
                             <core:Fragment fragmentName="gq4dev.html5.fragments.employeeFragment" type="XML" />
                         </WizardStep>
-                        <WizardStep title="{i18n>employeeAdditionalInfo}" validated="true">
+                        <WizardStep id="employeeAddInfoStep" title="{i18n>employeeAdditionalInfo}" validated="true">
                             <MessageStrip text="{i18n>additionalInfo}" showIcon="true" class="sapUiMediumMarginBottom" />
 
                             <Label text="{i18n>comments}" />
@@ -38,7 +38,7 @@
                     </Wizard>
                 </content>
                 <footer>
-                <Bar id="otbFooter">
+                <Bar id="Footer">
                     <contentLeft>
                         <Button icon="sap-icon://alert" text="{= ${message>/}.length }" visible="{= ${message>/}.length > 0 }" type="Emphasized" press="onMessagePopoverPress" />
                     </contentLeft>

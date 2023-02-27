@@ -2,10 +2,10 @@ sap.ui.define(
   [
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
+    "sap/ui/core/Fragment",
     "sap/ui/core/message/Message",
-    "sap/ui/core/Fragment"
   ],
-  function (BaseController, MessageToast, Message,Fragment) {
+  function (BaseController, MessageToast, Fragment, Message) {
     "use strict";
 
     return BaseController.extend("gq4dev.html5.controller.EmployeeWizard", {
@@ -14,67 +14,114 @@ sap.ui.define(
         this._wizard = this.getView().byId('createEmployeeWizard')
         this._EmployeeType = "intern"
 
-
         var oView = this.getView()
         // Iniciamos un modelo de mensajes (donde guardaremos los datos)
-        var oMessageManager = sap.ui.getCore().getMessageManager();
-        oView.setModel(oMessageManager.getMessageModel(), "message");
+        this._oMessageManager = sap.ui.getCore().getMessageManager();
+        oView.setModel(this._oMessageManager.getMessageModel(), "message");
 
         // Registramos el disparador a la vista actual
-        oMessageManager.registerObject(oView, true);
+        this._oMessageManager.registerObject(oView, true);
 
       },
       onbtnEmployeePress: function (oEvent) {
-        let employeeModel = new sap.ui.model.json.JSONModel({ Name: "Guillermo" })
+        var resourceBundle = this.getView().getModel("i18n").getResourceBundle()
+
+        let employeeModel = new sap.ui.model.json.JSONModel([])
         this.getView().setModel(employeeModel, "employeeModel")
-        this.getView().getModel("employeeModel")
 
         var btnEmployeeType = oEvent.getSource();
         let sliderSalary = this.byId("sliderSalary")
-        let sliderPrice = this.byId("sliderPrice")
         // Traemos el tipo de empleado seleccionado
         this._EmployeeType = btnEmployeeType.data("btnTypeEmployee")
 
-        //Seteamos el input de DNI o CFI
-        if (this._EmployeeType === "intern" || this._EmployeeType === "manager") {
-          sliderSalary.setVisible(true)
-          sliderPrice.setVisible(false)
-          this.byId("inputCFI").setVisible(false)
-          this.byId("inputDNI").setVisible(true)
-        } else {
-          sliderSalary.setVisible(false)
-          sliderPrice.setVisible(true)
-          sliderPrice.setValue(400)
-          sliderPrice.setMin(100)
-          sliderPrice.setMax(2000)
-          this.byId("inputCFI").setVisible(true)
-          this.byId("inputDNI").setVisible(false)
+     
+
+        switch (this._EmployeeType) {
+          case 'intern':
+
+            employeeModel.setProperty("/Type", 0)
+            this.byId("labelDNI").setText(resourceBundle.getText("DNI"))
+            this.byId("labelSalary").setText(resourceBundle.getText("salary"))
+            sliderSalary.setProperty("value", 24000)
+            sliderSalary.setMin(12000)
+            sliderSalary.setMax(80000)
+            break
+          case 'manager':
+            employeeModel.setProperty("/Type", 1)
+            this.byId("labelDNI").setText(resourceBundle.getText("DNI"))
+            this.byId("labelSalary").setText(resourceBundle.getText("salary"))
+            sliderSalary.setProperty("value", 70000)
+            sliderSalary.setMin(50000)
+            sliderSalary.setMax(200000)
+            67
+            break
+          case 'autonomous':
+            employeeModel.setProperty("/Type", 2)
+            this.byId("labelDNI").setText(resourceBundle.getText("CIF"))
+            this.byId("labelSalary").setText(resourceBundle.getText("price"))
+            sliderSalary.setProperty("value", 400)
+            sliderSalary.setMin(100)
+            sliderSalary.setMax(2000)
+            break;
+          default:
+            break
         }
-        if (this._EmployeeType === "intern") {
-          sliderSalary.setValue(24000)
-          sliderSalary.setMin(12000)
-          sliderSalary.setMax(80000)
-        } else {
-          sliderSalary.setValue(70000)
-          sliderSalary.setMin(50000)
-          sliderSalary.setMax(200000)
-        }
-        this._wizard.validateStep(this.byId("employeeTypeStep"));
-        this._wizard.nextStep();
+        this._wizard.setCurrentStep(this.byId("employeeInfoStep"));
       },
       onPressReview: function () {
         this._navigation.to(this.byId("review"));
       },
+      validateDNI: function (dni) {
+        this._oMessageManager.removeAllMessages();
+        var number;
+        var letter;
+        var letterList;
+        var regularExp = /^\d{8}[a-zA-Z]$/;
+        //Se comprueba que el formato es válido
+        if (regularExp.test(dni) === true) {
+          //Número
+          number = dni.substr(0, dni.length - 1);
+          //Letra
+          letter = dni.substr(dni.length - 1, 1);
+          number = number % 23;
+          letterList = "TRWAGMYFPDXBNJZSQVHLCKET";
+          letterList = letterList.substring(number, number + 1);
+          if (letterList !== letter.toUpperCase()) {
+            //Error
+            this._oMessageManager.addMessages(
+              new Message({
+                message: "Ingrese un DNI español valido",
+                type: "Error",
+                processor: this.getView().getModel("message")
+              }))
+             
+            return false
+          } else {
+            //Correcto
+            return true
+          }
+        } else {
+          //Error
+          this._oMessageManager.addMessages(
+            new Message({
+              message: "Ingrese un DNI español valido",
+              type: "Error",
+              processor: this.getView().getModel("message")
+            }))
+            this.byId("inputDNI").setValueState("Error")
+          return false
+        }
+
+      },
       validateInfoStep: function () {
-        this._checkStep("employeeInfoStep", ["inputName", "inputLastName", "inputDNI", "infoDatePicker"]);
+        this._checkStep("employeeInfoStep", ["inputName", "inputLastName","inputDNI", "infoDatePicker"] );
       },
       // Verifica en que paso estamos del wizard y pasa un array de inputs para validar
       _checkStep: function (sStepName, aInputIds) {
         let oStep = this.byId(sStepName)
+        let dni = this.byId("inputDNI").getValue()
         let bEmptyInputs = this._checkInputFields(aInputIds)
-
-
-        if (!bEmptyInputs) {
+        if (!bEmptyInputs && this.validateDNI(dni)) {
           this._wizard.validateStep(oStep)
         } else {
           this._wizard.invalidateStep(oStep)
@@ -98,8 +145,7 @@ sap.ui.define(
         });
       },
       _getMessagePopover: function () {
-        var oView = this.getView();
-
+        var oView = this.getView()
         if (!this._pMessagePopover) {
           this._pMessagePopover = Fragment.load({
             id: oView.getId(),
@@ -117,5 +163,31 @@ sap.ui.define(
           oMessagePopover.openBy(oSourceControl);
         });
       },
+      _editStep: function (sStepId) {
+        var fnAfterNavigate = function () {
+            // Reset wizard to given step
+            var oWizard = this.getView().byId("createEmployeeWizard")
+            var oStepToEdit = this.byId(sStepId);
+            oWizard.goToStep(oStepToEdit);
+
+            var oNavContainer = this.byId("navContainer");
+            oNavContainer.detachAfterNavigate(fnAfterNavigate);
+        }.bind(this);
+
+        // Nav back to the create page, use callback to set wizard
+        var oNavContainer = this.byId("navContainer");
+        oNavContainer.attachAfterNavigate(fnAfterNavigate);
+        oNavContainer.backToTop();
+    },
+    goToStep1:function(){
+      this._editStep("employeeTypeStep")
+    },
+    goToStep2:function(){
+      this._editStep("employeeInfoStep")
+    },
+    goToStep3:function(){
+      this._editStep("employeeAddInfoStep")
+    }
     })
   })
+
